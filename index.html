@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kopesa Express: marketplace para comprar e vender produtos em Angola.">
+    <meta name="theme-color" content="#0d0a09">
+    <title>Kopesa Express</title>
+
+    <!-- Ícones -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tipografia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Folha de estilos -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
+
+    <!-- Atalho flutuante para o marketplace -->
+    <button type="button" class="floating-widget oculto" id="btn-flutuante" data-action="ir-marketplace"
+            title="Ir para o Kopesa Market" aria-label="Ir para o Kopesa Market">
+        <i class="fas fa-truck-fast icon-moving" aria-hidden="true"></i>
+    </button>
+
+    <!-- Notificações -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- CABEÇALHO -->
+    <header class="app-header">
+        <button type="button" class="logo-texto" data-action="ir-home" aria-label="Kopesa Express, ir para o início">
+            <i class="fas fa-store logo-icon-animated" aria-hidden="true"></i>
+            Kopesa <span class="destaque">express</span>
+        </button>
+
+        <div class="header-actions">
+            <span id="badge-utilizador" class="badge-user oculto"></span>
+
+            <button type="button" class="icon-btn oculto" id="btn-carrinho" data-action="abrir-carrinho"
+                    title="Carrinho" aria-label="Abrir carrinho">
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+                <span id="badge-carrinho" class="badge-count oculto">0</span>
+            </button>
+
+            <button type="button" class="icon-btn" id="btn-admin-login" data-action="abrir-pin"
+                    title="Painel de administração" aria-label="Abrir painel de administração">
+                <i class="fas fa-shield-alt" aria-hidden="true"></i>
+            </button>
+
+            <button type="button" class="icon-btn oculto" id="btn-logout" data-action="logout"
+                    title="Terminar sessão" aria-label="Terminar sessão">
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main" id="conteudo">
+
+        <!-- 1. AUTENTICAÇÃO -->
+        <section id="ecra-auth" class="ecra auth-card animate-fade" aria-labelledby="titulo-auth">
+            <div class="auth-header">
+                <h2 id="titulo-auth">Bem-vindo à <span class="destaque-texto">Kopesa</span></h2>
+                <p>Compre e venda de forma simples</p>
+            </div>
+
+            <div class="tabs-auth" role="tablist" aria-label="Modo de acesso">
+                <button type="button" class="tab-btn ativo" id="tab-entrar" role="tab" aria-selected="true"
+                        data-action="modo-auth" data-modo="entrar">Entrar</button>
+                <button type="button" class="tab-btn" id="tab-criar" role="tab" aria-selected="false"
+                        data-action="modo-auth" data-modo="criar">Criar conta</button>
+            </div>
+
+            <form id="form-auth" novalidate>
+                <div class="form-group">
+                    <label for="auth-contacto">Telefone ou email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user icon-input" aria-hidden="true"></i>
+                        <input type="text" id="auth-contacto" autocomplete="username" required
+                               placeholder="Ex: 923456789">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="auth-password">Palavra-passe</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock icon-input" aria-hidden="true"></i>
+                        <input type="password" id="auth-password" autocomplete="current-password" required
+                               placeholder="Mínimo de 6 caracteres">
+                    </div>
+                </div>
+
+                <div class="form-group oculto" id="grupo-nome">
+                    <label for="auth-nome">Nome completo</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-id-card icon-input" aria-hidden="true"></i>
+                        <input type="text" id="auth-nome" autocomplete="name" placeholder="O seu nome">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-principal" id="btn-submit-auth">Entrar</button>
+            </form>
+        </section>
+
+        <!-- 2. MENU INICIAL -->
+        <section id="ecra-escolha" class="ecra auth-card oculto animate-scale" aria-labelledby="titulo-escolha">
+            <div class="auth-header">
+                <h2 id="titulo-escolha">Painel principal</h2>
+                <p>Escolha para onde quer ir</p>
+            </div>
+
+            <div class="menu-choice-grid">
+                <button type="button" class="btn-choice-card" data-action="ir-marketplace">
+                    <span class="choice-icon"><i class="fas fa-store" aria-hidden="true"></i></span>
+                    <span class="choice-info">
+                        <h3>Kopesa Market</h3>
+                        <p>Explore produtos e faça compras</p>
+                    </span>
+                </button>
+
+                <button type="button" class="btn-choice-card secondary oculto" id="card-vendedor" data-action="ir-vendedor">
+                    <span class="choice-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></span>
+                    <span class="choice-info">
+                        <h3>Painel do vendedor</h3>
+                        <p>Gira os seus produtos</p>
+                    </span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. KOPESA MARKET -->
+        <section id="ecra-cliente" class="ecra oculto animate-fade" aria-labelledby="titulo-market">
+            <div class="banner-bemvindo">
+                <div class="banner-info">
+                    <h3 id="titulo-market">Kopesa Market</h3>
+                    <p>A entrega e o pagamento são combinados diretamente com o vendedor, sem comissão sobre a venda.</p>
+                </div>
+                <div class="banner-actions">
+                    <button type="button" class="btn-principal btn-sm oculto" id="btn-publicar" data-action="abrir-novo-produto">
+                        <i class="fas fa-plus-circle" aria-hidden="true"></i> Publicar produto
+                    </button>
+                    <button type="button" class="btn-secundario btn-sm" data-action="voltar-escolha">
+                        <i class="fas fa-bars" aria-hidden="true"></i> Menu
+                    </button>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-bar-container">
+                    <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                    <input type="search" id="input-pesquisa-produto" placeholder="Pesquisar produto pelo nome"
+                           aria-label="Pesquisar produto pelo nome" autocomplete="off">
+                </div>
+                <select id="select-ordem" class="select-ordem" aria-label="Ordenar produtos">
+                    <option value="recentes">Mais recentes</option>
+                    <option value="preco-asc">Preço: do menor ao maior</option>
+                    <option value="preco-desc">Preço: do maior ao menor</option>
+                    <option value="nome">Nome (A a Z)</option>
+                </select>
+            </div>
+
+            <div class="chips" id="chips-categorias" role="group" aria-label="Filtrar por categoria"></div>
+
+            <div class="section-title-flex">
+                <h4>Produtos disponíveis</h4>
+                <span class="contador-produtos" id="contador-produtos" aria-live="polite"></span>
+            </div>
+
+            <div class="grid-produtos" id="lista-produtos-cliente"></div>
+        </section>
+
+        <!-- 4. PAINEL DO VENDEDOR -->
+        <section id="ecra-vendedor" class="ecra oculto animate-fade" aria-labelledby="titulo-vendedor">
+            <div class="painel-container">
+                <div class="painel-header-flex">
+                    <div>
+                        <h2 id="titulo-vendedor">Painel do vendedor</h2>
+                        <p>Resumo da sua atividade comercial</p>
+                    </div>
+                    <div class="banner-actions">
+                        <button type="button" class="btn-principal btn-sm" data-action="abrir-novo-produto">
+                            <i class="fas fa-plus-circle" aria-hidden="true"></i> Publicar produto
+                        </button>
+                        <button type="button" class="btn-secundario btn-sm" data-action="voltar-escolha">
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-box-open" aria-hidden="true"></i></div>
+                        <div>
+                            <span>Produtos publicados</span>
+                            <h3 id="stat-total-produtos">0</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success"><i class="fas fa-coins" aria-hidden="true"></i></div>
+                        <div>
+                            <span>Valor do catálogo</span>
+                            <h3 id="stat-valor-catalogo">0 Kz</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="subtitulo-painel">Os meus produtos</h4>
+                <div id="lista-meus-produtos" class="lista-meus-produtos"></div>
+            </div>
+        </section>
+
+        <!-- 5. ADMINISTRAÇÃO -->
+        <section id="ecra-admin" class="ecra oculto animate-fade" aria-labelledby="titulo-admin">
+            <div class="painel-container">
+                <div class="painel-header-flex">
+                    <div>
+                        <h2 id="titulo-admin">Painel administrativo</h2>
+                        <p>Taxas de publicação e levantamentos</p>
+                    </div>
+                    <button type="button" class="btn-secundario btn-sm" data-action="ir-home">
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-coins" aria-hidden="true"></i></div>
+                        <div>
+                            <span>Taxas recebidas</span>
+                            <h3 id="admin-total-taxas">0 Kz</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success"><i class="fas fa-wallet" aria-hidden="true"></i></div>
+                        <div>
+                            <span>Saldo disponível</span>
+                            <h3 id="admin-saldo" class="valor-positivo">0 Kz</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-box-open" aria-hidden="true"></i></div>
+                        <div>
+                            <span>Produtos publicados</span>
+                            <h3 id="admin-total-publicacoes">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="subtitulo-painel">Pagamentos pendentes</h4>
+                <div id="admin-lista-pendentes" class="lista-taxas"></div>
+
+                <h4 class="subtitulo-painel">Últimas taxas</h4>
+                <div id="admin-lista-taxas" class="lista-taxas"></div>
+
+                <form id="form-saque" class="auth-card admin-saque-card" novalidate>
+                    <h3>Pedir levantamento</h3>
+                    <p>Para uma conta bancária (IBAN) ou Multicaixa Express (telemóvel)</p>
+                    <div class="form-group">
+                        <label for="admin-conta-saque">IBAN ou telemóvel MCX</label>
+                        <input type="text" id="admin-conta-saque" placeholder="AO06... ou 923456789" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-valor-saque">Valor a levantar (Kz)</label>
+                        <input type="number" id="admin-valor-saque" min="1" step="1" inputmode="numeric" placeholder="0">
+                    </div>
+                    <button type="submit" class="btn-principal">Pedir levantamento</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: PUBLICAR PRODUTO -->
+    <div id="modal-produto" class="modal oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-produto">
+        <div class="modal-conteudo animate-scale">
+            <div class="modal-header">
+                <h3 id="titulo-modal-produto">Publicar novo produto</h3>
+                <button type="button" class="close-btn" data-action="fechar-novo-produto" aria-label="Fechar">&times;</button>
+            </div>
+            <form id="form-produto" novalidate>
+                <div class="form-group">
+                    <label for="prod-nome">Nome do produto</label>
+                    <input type="text" id="prod-nome" maxlength="80" required placeholder="Ex: Ténis Nike Air Max">
+                </div>
+                <div class="form-group">
+                    <label for="prod-valor">Valor (Kz)</label>
+                    <input type="number" id="prod-valor" min="25000" step="1" inputmode="numeric" required placeholder="Mínimo 25000">
+                    <p class="taxa-info" id="taxa-info" aria-live="polite"></p>
+                </div>
+                <div class="form-group">
+                    <label for="prod-categoria">Categoria</label>
+                    <select id="prod-categoria" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="prod-contacto">Telemóvel do vendedor</label>
+                    <input type="tel" id="prod-contacto" required placeholder="Ex: 923456789" autocomplete="tel">
+                </div>
+                <div class="form-group">
+                    <label for="prod-foto">Foto do produto</label>
+                    <div class="file-upload-box">
+                        <input type="file" id="prod-foto" accept="image/*">
+                        <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                        <span id="prod-foto-texto">Toque para carregar a foto do produto</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-principal" id="btn-submit-produto">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i> Continuar para o pagamento
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CARRINHO -->
+    <div id="modal-carrinho" class="modal oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-carrinho">
+        <div class="modal-conteudo animate-scale">
+            <div class="modal-header">
+                <h3 id="titulo-modal-carrinho"><i class="fas fa-shopping-bag icone-destaque" aria-hidden="true"></i> O seu carrinho</h3>
+                <button type="button" class="close-btn" data-action="fechar-carrinho" aria-label="Fechar">&times;</button>
+            </div>
+
+            <div id="carrinho-corpo">
+                <div id="itens-carrinho-lista" class="carrinho-scroll"></div>
+                <div class="total-row">
+                    <span>Total estimado</span>
+                    <strong id="carrinho-total-valor">0 Kz</strong>
+                </div>
+                <button type="button" class="btn-principal" id="btn-finalizar" data-action="finalizar-compra">
+                    Contactar vendedores
+                </button>
+            </div>
+
+            <div id="carrinho-resultado" class="oculto"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: PIN DO ADMINISTRADOR -->
+    <div id="modal-pin" class="modal oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-pin">
+        <div class="modal-conteudo animate-scale">
+            <div class="modal-header">
+                <h3 id="titulo-modal-pin">Acesso do administrador</h3>
+                <button type="button" class="close-btn" data-action="fechar-pin" aria-label="Fechar">&times;</button>
+            </div>
+            <form id="form-pin" novalidate>
+                <div class="form-group">
+                    <label for="input-pin">PIN</label>
+                    <input type="password" id="input-pin" inputmode="numeric" autocomplete="off" placeholder="Insira o PIN">
+                </div>
+                <button type="submit" class="btn-principal">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: PAGAMENTO DA TAXA -->
+    <div id="modal-pagamento" class="modal oculto" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-pagamento">
+        <div class="modal-conteudo animate-scale">
+            <div class="modal-header">
+                <h3 id="titulo-modal-pagamento">Pagar taxa de publicação</h3>
+                <button type="button" class="close-btn" data-action="fechar-pagamento" aria-label="Fechar">&times;</button>
+            </div>
+            <div id="pagamento-conteudo"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
